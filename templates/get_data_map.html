@@ -1,0 +1,58 @@
+
+<html>
+<head>
+     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+   <body>
+     <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo center">Real Time Taxi Fare Prediction<font size="3">(Beta)</font></a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        
+      </ul>
+    </div>
+  </nav>
+  
+    <div class="row" style="margin-top: 20px;">
+ <frameset cols="25%,50%,25%">
+ <div id="mapdiv"></div>
+</frameset>
+
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script>
+    map = new OpenLayers.Map("mapdiv");
+    map.addLayer(new OpenLayers.Layer.OSM());
+       
+    var pois = new OpenLayers.Layer.Text( "My Points",
+                    { location:"./textfile.txt",
+                      projection: map.displayProjection
+                    });
+    map.addLayer(pois);
+ // create layer switcher widget in top right corner of map.
+    var layer_switcher= new OpenLayers.Control.LayerSwitcher({});
+    map.addControl(layer_switcher);
+    //Set start centrepoint and zoom    
+    var lonLat = new OpenLayers.LonLat( 9.5788, 48.9773 )
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            map.getProjectionObject() // to Spherical Mercator Projection
+          );
+    var zoom=11;
+    map.setCenter (lonLat, zoom);  
+    
+  </script>
+      </div>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+       
+   </body>
+</html>
