@@ -5,11 +5,12 @@ import datetime as dt
 import calendar
 from math import *
 import pickle
+import seaborn as sns
 
-dataset = pd.read_csv("/home/hamza/new_app/data/train.csv",nrows=100)
+dataset = pd.read_csv("/home/tauheed/Documents/Kaggle Taxi data/train.csv",nrows=100)
 
-#dataset = dataset.append({'key' : 'xyz' ,'fare_amount': 44.5, 'pickup_datetime' : '2012-04-21 04:30:42 UTC', 'pickup_longitude' : -73.9871, 'pickup_latitude' : 40.7331, 'dropoff_longitude' : -73.9916, 'dropoff_latitude' : 40.7581, 'passenger_count': 1} , ignore_index=True)
-
+dataset = dataset.append({'key' : 'xyz' ,'fare_amount': 44.5, 'pickup_datetime' : '2012-04-21 04:30:42 UTC', 'pickup_longitude' : -73.9871, 'pickup_latitude' : 40.7331, 'dropoff_longitude' : -73.9916, 'dropoff_latitude' : 40.7581, 'passenger_count': 1} , ignore_index=True)
+print(type(dataset))
 
 
 """Convertime to each aspects of time"""
@@ -28,7 +29,7 @@ dataset = dataset.dropna(how = 'any', axis = 'rows')
 # print(dataset.isnull().sum())
 
 """Distribution of fare_amount"""
-import seaborn as sns
+
 plt.figure(figsize=(8,5))
 sns.kdeplot(dataset['fare_amount']).set_title("Distribution of Trip Fare")
 
@@ -88,11 +89,11 @@ y_train = y[:-1,:]
 from sklearn.linear_model import LinearRegression
 regressor = LinearRegression()
 regressor.fit(X_train,y_train)
-y_pred = regressor.predict(X_test)
+# y_pred = regressor.predict(X_test)
 
 pickle.dump(regressor, open("model.pkl","wb"))
-#haha=pickle.load(open("model.pkl","rb"))
-#y_pred = haha.predict(test_input)
+haha=pickle.load(open("model.pkl","rb"))
+y_pred = haha.predict(test_input)
 
 
 """Random Forest"""
