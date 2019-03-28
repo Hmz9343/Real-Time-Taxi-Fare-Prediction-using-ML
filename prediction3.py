@@ -14,7 +14,7 @@ class taxi:
         #json_string=self.json_string
         json_object=json.loads(json_string)
    
-        dataset = pd.read_csv("/home/hamza/new_app/data/train.csv",nrows=100)
+        dataset = pd.read_csv("/home/tauheed/Documents/Kaggle Taxi data/train.csv",nrows=100)
         dataset = dataset.append(json_object,ignore_index=True)
         print(dataset.iloc[3,:])
 
