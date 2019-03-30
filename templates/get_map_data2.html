@@ -1,0 +1,186 @@
+<html>
+<head>
+     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style type="text/css">
+    html, body, #map{
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+    </style>        
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <script type="text/javascript">
+        
+      </script>
+    </head>
+   <body>
+     <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo center">Real Time Taxi Fare Prediction<font size="3">(Beta)</font></a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        
+      </ul>
+    </div>
+  </nav>
+
+
+  <div id="map"></div>
+  <script type="text/javascript">
+
+
+
+
+    var options = {
+      center: [40.730610, -73.935242],
+      zoom: 15
+    }
+    
+    var map = L.map('map', options);
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: 'OSM'})
+    .addTo(map);
+
+    // map.on('click', 
+    //  function(e){
+    //    //var coord = e.latlng.toString().split(',');
+    //    //var lat = coord[0].split('(');
+    //    //var lng = coord[1].split(')');
+    //    //alert("You clicked the map at LAT: " + lat[1] + " and LONG: " + lng[0]);
+    //    L.marker(e.latlng).addTo(map);
+    //  });
+
+
+    var greenIcon = new L.Icon({
+      iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+    var redIcon = new L.Icon({
+      iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+    var myMarker = L.marker([40.730610, -73.935242], {icon: redIcon,title: "MyPoint", alt: "The Big I", draggable: true})
+    .addTo(map)
+    .on('dragend', function() {
+      var coord = String(myMarker.getLatLng()).split(',');
+      console.log(coord);
+      var lat = coord[0].split('(');
+      console.log(lat);
+      var lng = coord[1].split(')');
+      console.log(lng);
+      myMarker.bindPopup("Moved to: " + lat[1] + ", " + lng[0] + ".").openPopup();
+      $("#Dropoff_Longitude").val(lng[0]);
+      $("#Dropoff_Latitude").val(lat[1]);
+    });
+
+
+    var myMarker2 = L.marker([40.730610, -73.935242], {icon: greenIcon,title: "MyPoint2", alt: "The Big I", draggable: true})
+    .addTo(map)
+    .on('dragend', function() {
+      var coord = String(myMarker2.getLatLng()).split(',');
+      console.log(coord);
+      var lat = coord[0].split('(');
+      console.log(lat);
+      var lng = coord[1].split(')');
+      console.log(lng);
+
+      myMarker2.bindPopup("Moved to: " + lat[1] + ", " + lng[0] + ".").openPopup();
+
+      $("#Pickup_Longitude").val(lng[0]);
+      $("#Pickup_Latitude").val(lat[1]);      
+    });
+
+     var currentdate = new Date(); 
+  var datetime =currentdate.getFullYear()+"-"+ (currentdate.getMonth()+1)+"-"+currentdate.getDate()+" " 
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds()+" UTC"
+document.getElementById("Pickup_Datetime").value = datetime;
+$("#Pickup_Datetime").val(datetime); 
+  </script>
+
+
+  <div class="row" style="margin-top: 20px;">
+    <form action = "http://localhost:5000/predict" method = "POST" class="col s12">
+      
+      <div class="row">
+        
+        <div class="input-field col s6">
+    <input id="Pickup_Datetime" type="text" class="validate"   name="Pickup_Datetime" value="2012-04-21 04:30:42 UTC" readonly />
+        <label for="Pickup_Datetime" >Pickup_Datetime</label>
+        </div>
+       
+       <div class="input-field col s6">
+        <input id="Passenger_Count" type="text" class="validate" type ="text" name = "Passenger_Count" value="0"/>
+      <label for="Passenger_Count">Passenger_Count</label>
+      </div>
+
+      </div>
+      
+
+      <div class="row">
+        
+        <div class="input-field col s6">
+        <input id="Pickup_Longitude" type="text" class="validate" type = "text" name = "Pickup_Longitude" value="0" readonly/>
+        <label for="Pickup_Longitude">Pickup_Longitude</label>
+        </div>
+
+        <div class="input-field col s6">
+        <input id="Pickup_Latitude" type="text" class="validate" type = "text" name = "Pickup_Latitude" value="0" readonly/>
+        <label for="Pickup_Latitude">Pickup_Latitude</label>
+        </div>
+
+    
+      </div>
+
+    
+      <div class="row">
+        
+     
+
+        <div class="input-field col s6">
+        <input  value="0" id="Dropoff_Longitude" type="text" class="validate" type ="text" name = "Dropoff_Longitude" readonly />
+        <label for="Dropoff_Longitude">Dropoff_Longitude</label>
+        </div>
+    
+       <div class="input-field col s6">
+        <input  value="0" id="Dropoff_Latitude" type="text" class="validate" type ="text" name = "Dropoff_Latitude" readonly/>
+        <label for="Dropoff_Latitude">Dropoff_Latitude</label>
+        </div>
+     
+      </div>
+
+
+
+
+      <div class="row">
+      <div class="input-field col s12">
+        <button  class="btn waves-effect waves-light" type="submit" name="action">Submit
+    <i class="material-icons right">send</i>
+  </button>
+</div>
+</div>
+      </form>
+      </div>
+    
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+       
+   </body>
+</html>
