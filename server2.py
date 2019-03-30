@@ -1,14 +1,14 @@
-from prediction3 import taxi
+
 import numpy as np
 from flask import Flask, render_template, request, jsonify
 import pickle
+from prediction3 import taxi
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def student():
-   return render_template('get_data_map.html')
+   return render_template('get_map_data2.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -34,6 +34,4 @@ def predict():
 	return jsonify(output)
 
 if __name__ == '__main__':
-	print("dslfasd")
-	haha=pickle.load(open("model2.pkl","rb"))
-	app.run(debug = True)
+	app.run(host='127.0.0.1', port=8080)
